@@ -47,9 +47,9 @@ export default function Home() {
                   <CardTitle className="font-headline text-2xl">Subscribe for Free</CardTitle>
                 </CardHeader>
                 <CardContent className="text-left space-y-4">
-                  <p className="font-body">To get started, send <span className="font-bold text-primary">"Hi"</span> to our WhatsApp number:</p>
+                  <p className="font-body">To join the sandbox, send <span className="font-bold text-primary">"join fire-meant"</span> to our WhatsApp number. After that, send <span className="font-bold text-primary">"Hi"</span> to begin registration.</p>
                   <div className="text-center p-4 bg-accent/20 border border-dashed rounded-lg">
-                    <p className="text-2xl font-bold tracking-wider font-mono text-primary">+27 12 345 6789</p>
+                    <p className="text-2xl font-bold tracking-wider font-mono text-primary">+1 415 523 8886</p>
                   </div>
                   <p className="text-sm text-muted-foreground font-body">Save this number to your contacts to ensure you receive our alerts.</p>
                 </CardContent>
@@ -93,15 +93,15 @@ export default function Home() {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground font-bold text-xl">1</div>
                 <div>
-                  <h3 className="text-lg font-semibold font-headline">Register</h3>
-                  <p className="mt-1 text-muted-foreground font-body">Send "Hi" on WhatsApp to start the simple, guided registration.</p>
+                  <h3 className="text-lg font-semibold font-headline">Join Sandbox</h3>
+                  <p className="mt-1 text-muted-foreground font-body">Send "join fire-meant" on WhatsApp to enter the sandbox.</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-primary text-primary-foreground font-bold text-xl">2</div>
                 <div>
-                  <h3 className="text-lg font-semibold font-headline">Customize</h3>
-                  <p className="mt-1 text-muted-foreground font-body">Share your location and language to receive personalized alerts.</p>
+                  <h3 className="text-lg font-semibold font-headline">Register</h3>
+                  <p className="mt-1 text-muted-foreground font-body">Then send "Hi" to start the simple, guided registration and share your preferences.</p>
                 </div>
               </div>
               <div className="flex items-start space-x-4">
