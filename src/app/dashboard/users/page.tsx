@@ -1,8 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { UsersTable } from './_components/users-table';
-import { mockUsers } from '@/lib/data';
+import clientPromise from '@/lib/db';
+import type { User } from '@/lib/types';
 
-export default function UsersPage() {
+async function getUsers(): Promise<User[]> {
+  const client = await clientPromise;
+  const db = client.db();
+  const users = await db.collection<User>('users').find({}).toArray();
+  // Convert ObjectId to string for serialization
+  return users.map(user => ({ ...user, id: user._id?.toString() ?? user.id, _id: undefined }));
+}
+
+export default async function UsersPage() {
+  const users = await getUsers();
+
   return (
     <Card>
       <CardHeader>
@@ -12,7 +23,7 @@ export default function UsersPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <UsersTable data={mockUsers} />
+        <UsersTable data={users} />
       </CardContent>
     </Card>
   );

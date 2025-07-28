@@ -1,4 +1,7 @@
+import type { ObjectId } from 'mongodb';
+
 export type User = {
+  _id?: ObjectId;
   id: string;
   name: string;
   phone: string;
@@ -9,6 +12,7 @@ export type User = {
 };
 
 export type Alert = {
+  _id?: ObjectId;
   id: string;
   timestamp: string;
   area: string;
@@ -16,3 +20,10 @@ export type Alert = {
   message: string;
   status: 'Sent' | 'Delivered' | 'Read';
 };
+
+export type TwilioConfig = {
+  _id?: ObjectId;
+  accountSid: string;
+  authToken: string;
+  phoneNumber: string;
+}

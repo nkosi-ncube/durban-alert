@@ -1,8 +1,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertsTable } from './_components/alerts-table';
-import { mockAlerts } from '@/lib/data';
+import clientPromise from '@/lib/db';
+import type { Alert } from '@/lib/types';
 
-export default function AlertsPage() {
+async function getAlerts(): Promise<Alert[]> {
+  const client = await clientPromise;
+  const db = client.db();
+  const alerts = await db.collection<Alert>('alerts').find({}).sort({ timestamp: -1 }).toArray();
+  return alerts.map(alert => ({ ...alert, id: alert._id?.toString() ?? alert.id, _id: undefined }));
+}
+
+
+export default async function AlertsPage() {
+  const alerts = await getAlerts();
+
   return (
     <Card>
       <CardHeader>
@@ -12,7 +23,7 @@ export default function AlertsPage() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <AlertsTable data={mockAlerts} />
+        <AlertsTable data={alerts} />
       </CardContent>
     </Card>
   );

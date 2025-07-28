@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { saveTwilioCredentials } from '../_actions/save-credentials';
 
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -32,18 +33,24 @@ export function TwilioForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    // Here you would typically make an API call to your backend to save the credentials.
-    // Since we don't have a backend endpoint yet, we'll simulate an async operation.
-    console.log('Saving credentials (simulation):', values);
     
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    const result = await saveTwilioCredentials(values);
+
     setLoading(false);
     
-    toast({
-      title: "Credentials Saved",
-      description: "Your Twilio credentials have been saved successfully.",
-    });
+    if (result.success) {
+      toast({
+        title: "Credentials Saved",
+        description: "Your Twilio credentials have been saved successfully.",
+      });
+      form.reset();
+    } else {
+      toast({
+        title: "Error",
+        description: result.message,
+        variant: "destructive",
+      });
+    }
   }
 
   return (
@@ -82,7 +89,7 @@ export function TwilioForm() {
             <FormItem>
               <FormLabel>Twilio Phone Number</FormLabel>
               <FormControl>
-                <Input placeholder="whatsapp:+14155238886" {...field} />
+                <Input placeholder="+14155238886" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
