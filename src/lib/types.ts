@@ -2,13 +2,14 @@ import type { ObjectId } from 'mongodb';
 
 export type User = {
   _id?: ObjectId;
-  id: string;
+  id?: string;
   name: string;
   phone: string;
   location: string;
   language: 'English' | 'Zulu' | 'Afrikaans';
   subscription: 'Emergency only' | 'All weather updates' | 'Weekly summaries';
   joined: string;
+  registrationStep: 'started' | 'awaiting_name' | 'awaiting_location' | 'awaiting_language' | 'awaiting_subscription' | 'completed';
 };
 
 export type Alert = {
