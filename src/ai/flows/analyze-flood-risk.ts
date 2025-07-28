@@ -12,14 +12,10 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { getRealTimeWeather, type WeatherData } from '@/services/weather';
 
 const AnalyzeFloodRiskInputSchema = z.object({
   area: z.string().describe('The area in Durban to analyze flood risk for.'),
-  weatherData: z
-    .string()
-    .describe(
-      'Weather data including rainfall, temperature, humidity, and wind speed.'
-    ),
 });
 
 export type AnalyzeFloodRiskInput = z.infer<typeof AnalyzeFloodRiskInputSchema>;
@@ -34,9 +30,27 @@ const AnalyzeFloodRiskOutputSchema = z.object({
   recommendedActions: z
     .string()
     .describe('Recommended actions for residents based on the flood risk.'),
+  weatherData: z.object({
+    rainfall: z.number(),
+    temperature: z.number(),
+    humidity: z.number(),
+    windSpeed: z.number(),
+    windDirection: z.string(),
+  }).describe('The weather data used for the analysis.'),
 });
 
 export type AnalyzeFloodRiskOutput = z.infer<typeof AnalyzeFloodRiskOutputSchema>;
+
+const weatherTool = ai.defineTool(
+    {
+        name: 'getWeatherForArea',
+        description: 'Gets the current weather conditions for a specified area in Durban.',
+        inputSchema: z.object({ area: z.string() }),
+        outputSchema: z.custom<WeatherData>(),
+    },
+    async (input) => await getRealTimeWeather(input.area)
+);
+
 
 export async function analyzeFloodRisk(input: AnalyzeFloodRiskInput): Promise<AnalyzeFloodRiskOutput> {
   return analyzeFloodRiskFlow(input);
@@ -46,22 +60,18 @@ const prompt = ai.definePrompt({
   name: 'analyzeFloodRiskPrompt',
   input: {schema: AnalyzeFloodRiskInputSchema},
   output: {schema: AnalyzeFloodRiskOutputSchema},
+  tools: [weatherTool],
   prompt: `You are an expert in analyzing flood risks in Durban, South Africa.
 
-You will receive weather data for a specific area in Durban and must assess the flood risk level (LOW, MEDIUM, HIGH).
+You will receive an area in Durban. Your first step is to use the provided tool to get the current weather data for that area.
+Once you have the weather data, you must assess the flood risk level (LOW, MEDIUM, HIGH).
 Based on the risk level, provide an explanation and recommend actions for residents.
 
 Area: {{{area}}}
-Weather Data: {{{weatherData}}}
 
 Analyze the provided data and determine the flood risk level, explain your reasoning, and suggest actions for residents.
-
-Ensure the output is formatted as:
-{
-  "floodRiskLevel": "(LOW, MEDIUM, or HIGH)",
-  "explanation": "Explanation of the risk level",
-  "recommendedActions": "Recommended actions for residents"
-}`,
+Also include the weather data you used in your final response.
+`,
 });
 
 const analyzeFloodRiskFlow = ai.defineFlow(
