@@ -7,7 +7,7 @@ import { findOrCreateUser, updateUser } from '@/services/users';
 import { sendWhatsAppMessage } from '@/services/whatsapp';
 import type { User } from '@/lib/types';
 
-export const handleIncomingMessageInputSchema = z.object({
+const handleIncomingMessageInputSchema = z.object({
   from: z.string().describe("The user's WhatsApp number in the format 'whatsapp:+1...'"),
   message: z.string().describe("The message sent by the user."),
 });
@@ -25,14 +25,16 @@ const handleIncomingMessageFlow = ai.defineFlow(
     outputSchema: z.void(),
   },
   async ({ from, message }) => {
-    const user = await findOrCreateUser(from);
+    // Twilio sends the number with a `whatsapp:` prefix, so we strip it.
+    const fromNumber = from.replace('whatsapp:', '');
+    const user = await findOrCreateUser(fromNumber);
 
     if (user.registrationStep === 'completed') {
-      await sendWhatsAppMessage(from, 'You are already registered. You will receive flood alerts for your area. To change your settings, please visit our website.');
+      await sendWhatsAppMessage(fromNumber, 'You are already registered. You will receive flood alerts for your area. To change your settings, please visit our website.');
       return;
     }
 
-    const nextStep = await determineNextStep(user, message.trim());
+    await determineNextStep(user, message.trim());
   }
 );
 

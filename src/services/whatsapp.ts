@@ -14,6 +14,7 @@ export async function sendWhatsAppMessage(to: string, body: string) {
   const config = await getTwilioConfig();
 
   if (!config) {
+    console.error('Twilio credentials are not configured.');
     throw new Error('Twilio credentials are not configured.');
   }
 
@@ -30,6 +31,7 @@ export async function sendWhatsAppMessage(to: string, body: string) {
     return message;
   } catch (error) {
     console.error('Error sending WhatsApp message:', error);
-    throw error;
+    // Don't re-throw the error to prevent crashing the flow if a single message fails.
+    // In a production app, you'd want more robust error handling here.
   }
 }
