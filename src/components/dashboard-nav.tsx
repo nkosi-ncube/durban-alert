@@ -8,6 +8,7 @@ import {
   ShieldAlert,
   CalendarClock,
   MessageCircleWarning,
+  Settings,
 } from 'lucide-react';
 import {
   SidebarMenu,
@@ -22,6 +23,7 @@ const navItems = [
   { href: '/dashboard/weekly-summary', label: 'Weekly Summary', icon: CalendarClock },
   { href: '/dashboard/users', label: 'Users', icon: Users },
   { href: '/dashboard/alerts', label: 'Alert Log', icon: MessageCircleWarning },
+  { href: '/dashboard/configure-twilio', label: 'Configure Twilio', icon: Settings },
 ];
 
 export function DashboardNav() {
