@@ -5,6 +5,5 @@ runConfig:
   # Increase this value if you'd like to automatically spin up
   # more instances in response to increased traffic.
   maxInstances: 1
-
-# Make the WhatsApp webhook endpoint public
-public: /api/whatsapp
+# Allow unauthenticated access to the development server
+entryPoint: next start --hostname 0.0.0.0
