@@ -18,6 +18,21 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  webpack: (
+    config,
+    { isServer }
+  ) => {
+    // Exclude specific dependencies from being bundled on the client-side
+    if (!isServer) {
+        config.externals.push(
+            '@opentelemetry/instrumentation',
+            '@opentelemetry/sdk-node',
+            'handlebars'
+        );
+    }
+
+    return config
+  },
 };
 
 export default nextConfig;
