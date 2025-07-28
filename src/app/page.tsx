@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, ShieldAlert, Languages, MessageSquareText } from 'lucide-react';
 import { Logo } from '@/components/logo';
 
-//hdhdh
+//hdhd
 export default function Home() {
   const features = [
     {
